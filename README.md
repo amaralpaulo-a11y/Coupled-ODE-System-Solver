@@ -104,14 +104,6 @@ O programa solicita:
 
 ---
 
-# Exemplo de Saída
-
-## Tabela gerada pelo programa
-
-![Tabela de saída](imagens/tabela_saida.png)
-
----
-
 # Tecnologias Utilizadas
 
 - Python  
