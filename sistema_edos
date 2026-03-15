@@ -1,0 +1,53 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from tabulate import tabulate
+
+
+def funcao(matriz, vetor):
+
+    solucao = np.linalg.solve(matriz, vetor)
+    return solucao
+
+
+def solve(ordem, matriz_de_parametros, vetor_inicial, vetor_de_bias, passo, tempo_simulacao):
+
+    tempo = 0
+    tempo_grafico = []
+
+    y_grafico = [[] for _ in range(ordem)]
+
+    vetor_intermediario = funcao(matriz_de_parametros, vetor_inicial)
+    vetor_saidas = vetor_inicial + passo*(vetor_intermediario + vetor_de_bias)
+
+    while tempo < tempo_simulacao:
+
+        tempo = tempo + passo
+        tempo_grafico.append(tempo)
+
+        vetor_saidas = vetor_saidas + passo*(vetor_intermediario + vetor_de_bias)
+
+        vetor_intermediario = funcao(matriz_de_parametros, vetor_saidas)
+
+        for i in range(ordem):
+            y_grafico[i].append(vetor_saidas[i])
+
+    dados = {"tempo": tempo_grafico}
+
+    for i in range(ordem):
+        dados[f"y{i+1}"] = y_grafico[i]
+
+    tabela = pd.DataFrame(dados)
+
+    print(tabulate(tabela, headers="keys", tablefmt="grid", showindex=False))
+
+    for j in range(ordem):
+        plt.plot(tempo_grafico, y_grafico[j], label=f"y{j+1}")
+
+    plt.xlabel("Tempo")
+    plt.ylabel("Y(t)")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+    return tabela
